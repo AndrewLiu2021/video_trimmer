@@ -246,14 +246,14 @@
 				"${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework",
-				"${PODS_ROOT}/ffmpeg-kit-ios-https/ffmpegkit.framework",
-				"${PODS_ROOT}/ffmpeg-kit-ios-https/libavcodec.framework",
-				"${PODS_ROOT}/ffmpeg-kit-ios-https/libavdevice.framework",
-				"${PODS_ROOT}/ffmpeg-kit-ios-https/libavfilter.framework",
-				"${PODS_ROOT}/ffmpeg-kit-ios-https/libavformat.framework",
-				"${PODS_ROOT}/ffmpeg-kit-ios-https/libavutil.framework",
-				"${PODS_ROOT}/ffmpeg-kit-ios-https/libswresample.framework",
-				"${PODS_ROOT}/ffmpeg-kit-ios-https/libswscale.framework",
+				"${PODS_ROOT}/ffmpeg-kit-ios-min-gpl/ffmpegkit.framework",
+				"${PODS_ROOT}/ffmpeg-kit-ios-min-gpl/libavcodec.framework",
+				"${PODS_ROOT}/ffmpeg-kit-ios-min-gpl/libavdevice.framework",
+				"${PODS_ROOT}/ffmpeg-kit-ios-min-gpl/libavfilter.framework",
+				"${PODS_ROOT}/ffmpeg-kit-ios-min-gpl/libavformat.framework",
+				"${PODS_ROOT}/ffmpeg-kit-ios-min-gpl/libavutil.framework",
+				"${PODS_ROOT}/ffmpeg-kit-ios-min-gpl/libswresample.framework",
+				"${PODS_ROOT}/ffmpeg-kit-ios-min-gpl/libswscale.framework",
 				"${BUILT_PRODUCTS_DIR}/file_picker/file_picker.framework",
 				"${BUILT_PRODUCTS_DIR}/libwebp/libwebp.framework",
 				"${BUILT_PRODUCTS_DIR}/path_provider_ios/path_provider_ios.framework",
@@ -408,7 +408,10 @@
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -545,7 +548,10 @@
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -577,7 +583,10 @@
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
