@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:example/preview.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _TrimmerViewState extends State<TrimmerView> {
 
   bool _isPlaying = false;
   bool _progressVisibility = false;
+  Uint8List? _imageData;
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _TrimmerViewState extends State<TrimmerView> {
     _trimmer.saveTrimmedVideo(
       startValue: _startValue,
       endValue: _endValue,
+      outputFormat: FileFormat.mp4,
       onSave: (outputPath) {
         setState(() {
           _progressVisibility = false;
@@ -95,7 +98,8 @@ class _TrimmerViewState extends State<TrimmerView> {
                       trimmer: _trimmer,
                       viewerHeight: 50.0,
                       viewerWidth: MediaQuery.of(context).size.width,
-                      maxVideoLength: const Duration(seconds: 10),
+                      //minVideoLength: const Duration(seconds: 3),
+                      maxVideoLength: const Duration(seconds: 6),
                       onChangeStart: (value) {
                         _startValue = value;
                       },

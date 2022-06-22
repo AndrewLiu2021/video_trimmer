@@ -80,3 +80,4 @@ example/android/.project
 example/android/.settings/org.eclipse.buildship.core.prefs
 example/ios/Flutter/.last_build_id
 .fvm/
+/example/assets/test.mov
