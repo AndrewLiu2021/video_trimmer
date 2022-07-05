@@ -35,24 +35,26 @@ class ThumbnailViewer extends StatelessWidget {
     Uint8List? _lastBytes;
 
     for (int i = 1; i <= numberOfThumbnails; i++) {
-      Uint8List? _bytes;
-      _bytes = await VideoThumbnail.thumbnailData(
-        video: _videoPath,
-        imageFormat: ImageFormat.JPEG,
-        timeMs: (_eachPart * i).toInt(),
-        quality: quality,
-      );
+      try {
+        Uint8List? _bytes;
+        _bytes = await VideoThumbnail.thumbnailData(
+          video: _videoPath,
+          imageFormat: ImageFormat.JPEG,
+          timeMs: (_eachPart * i).toInt(),
+          quality: quality,
+        );
 
-      // if current thumbnail is null use the last thumbnail
-      if (_bytes != null) {
-        _lastBytes = _bytes;
-      } else {
-        _bytes = _lastBytes;
-      }
+        // if current thumbnail is null use the last thumbnail
+        if (_bytes != null) {
+          _lastBytes = _bytes;
+        } else {
+          _bytes = _lastBytes;
+        }
 
-      _byteList.add(_bytes);
+        _byteList.add(_bytes);
 
-      yield _byteList;
+        yield _byteList;
+      } catch (_) {}
     }
   }
 
