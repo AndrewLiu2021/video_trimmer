@@ -244,7 +244,7 @@ class _TrimEditorState extends State<TrimEditor> with TickerProviderStateMixin {
 
   /// Keep track of the drag type, e.g. whether the user drags the left, center or
   /// right part of the frame. Set this in [_onDragStart] when the dragging starts.
-  EditorDragType _dragType = EditorDragType.left;
+  EditorDragType _dragType = EditorDragType.none;
 
   /// Whether the dragging is allowed. Dragging is ignore if the user's gesture is outside
   /// of the frame, to make the UI more realistic.
@@ -369,6 +369,10 @@ class _TrimEditorState extends State<TrimEditor> with TickerProviderStateMixin {
   /// Called when the user starts dragging the frame, on either side on the whole frame.
   /// Determine which [EditorDragType] is used.
   void _onDragStart(DragStartDetails details) {
+    _dragType = EditorDragType.none;
+    if (videoPlayerController.value.isPlaying) {
+      return;
+    }
     debugPrint("_onDragStart");
     debugPrint(details.localPosition.toString());
     debugPrint((_startPos.dx - details.localPosition.dx).abs().toString());
@@ -401,7 +405,7 @@ class _TrimEditorState extends State<TrimEditor> with TickerProviderStateMixin {
   /// [_onDragStart].
   /// Makes sure the limits are respected.
   void _onDragUpdate(DragUpdateDetails details) {
-    if (!_allowDrag) return;
+    if (!_allowDrag || _dragType == EditorDragType.none) return;
 
     _circleSize = widget.circleSizeOnDrag;
 
@@ -455,10 +459,12 @@ class _TrimEditorState extends State<TrimEditor> with TickerProviderStateMixin {
   void _onDragEnd(DragEndDetails details) {
     setState(() {
       _circleSize = widget.circleSize;
-      if (_dragType == EditorDragType.right) {
-        videoPlayerController.seekTo(Duration(milliseconds: _videoEndPos.toInt()));
-      } else {
-        videoPlayerController.seekTo(Duration(milliseconds: _videoStartPos.toInt()));
+      if (_dragType != EditorDragType.none) {
+        if (_dragType == EditorDragType.right) {
+          videoPlayerController.seekTo(Duration(milliseconds: _videoEndPos.toInt()));
+        } else {
+          videoPlayerController.seekTo(Duration(milliseconds: _videoStartPos.toInt()));
+        }
       }
     });
   }
@@ -549,5 +555,7 @@ enum EditorDragType {
   center,
 
   /// The user is dragging the right part of the frame.
-  right
+  right,
+
+  none,
 }
