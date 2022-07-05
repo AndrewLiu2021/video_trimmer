@@ -96,8 +96,12 @@ class _TrimmerViewState extends State<TrimmerView> {
                   Center(
                     child: TrimEditor(
                       trimmer: _trimmer,
+                      thumbnailWidth: 30,
                       viewerHeight: 50.0,
+                      spacing: 15,
                       viewerWidth: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                      sideTapSize: 40,
                       //minVideoLength: const Duration(seconds: 3),
                       maxVideoLength: const Duration(seconds: 6),
                       onChangeStart: (value) {

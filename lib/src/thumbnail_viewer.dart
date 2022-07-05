@@ -7,7 +7,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 class ThumbnailViewer extends StatelessWidget {
   final File videoFile;
   final int videoDuration;
-  final double thumbnailHeight;
+  final Size thumbnailSize;
   final BoxFit fit;
   final int numberOfThumbnails;
   final int quality;
@@ -18,7 +18,7 @@ class ThumbnailViewer extends StatelessWidget {
     Key? key,
     required this.videoFile,
     required this.videoDuration,
-    required this.thumbnailHeight,
+    required this.thumbnailSize,
     required this.numberOfThumbnails,
     required this.fit,
     this.quality = 75,
@@ -64,12 +64,13 @@ class ThumbnailViewer extends StatelessWidget {
         if (snapshot.hasData) {
           List<Uint8List?> _imageBytes = snapshot.data!;
           return ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.horizontal,
               itemCount: _imageBytes.length,
               itemBuilder: (context, index) {
                 return SizedBox(
-                  height: thumbnailHeight,
-                  width: thumbnailHeight,
+                  height: thumbnailSize.height,
+                  width: thumbnailSize.width,
                   child: Image(
                     image: MemoryImage(_imageBytes[index]!),
                     fit: fit,
@@ -79,7 +80,7 @@ class ThumbnailViewer extends StatelessWidget {
         } else {
           return Container(
             color: Colors.grey[900],
-            height: thumbnailHeight,
+            height: thumbnailSize.height,
             width: double.maxFinite,
           );
         }

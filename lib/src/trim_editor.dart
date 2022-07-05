@@ -102,6 +102,10 @@ class TrimEditor extends StatefulWidget {
   /// total duration of the video.
   final int sideTapSize;
 
+  final double? thumbnailWidth;
+
+  final double spacing;
+
   /// Widget for displaying the video trimmer.
   ///
   /// This has frame wise preview of the video with a
@@ -187,13 +191,15 @@ class TrimEditor extends StatefulWidget {
     this.circlePaintColor = Colors.white,
     this.borderPaintColor = Colors.white,
     this.scrubberPaintColor = Colors.white,
+    this.thumbnailWidth,
     this.thumbnailQuality = 75,
     this.showDuration = true,
-    this.sideTapSize = 24,
+    this.sideTapSize = 32,
     this.durationTextStyle = const TextStyle(color: Colors.white),
     this.onChangeStart,
     this.onChangeEnd,
     this.onChangePlaybackState,
+    this.spacing = 0,
   }) : super(key: key);
 
   @override
@@ -243,6 +249,8 @@ class _TrimEditorState extends State<TrimEditor> with TickerProviderStateMixin {
   /// Whether the dragging is allowed. Dragging is ignore if the user's gesture is outside
   /// of the frame, to make the UI more realistic.
   bool _allowDrag = true;
+
+  double get _thumbnailWidth => widget.thumbnailWidth ?? _thumbnailViewerH;
 
   @override
   void initState() {
@@ -304,9 +312,9 @@ class _TrimEditorState extends State<TrimEditor> with TickerProviderStateMixin {
 
     _thumbnailViewerH = widget.viewerHeight;
 
-    _numberOfThumbnails = widget.viewerWidth ~/ _thumbnailViewerH;
+    _numberOfThumbnails = widget.viewerWidth ~/ _thumbnailWidth;
 
-    _thumbnailViewerW = _numberOfThumbnails * _thumbnailViewerH;
+    _thumbnailViewerW = _numberOfThumbnails * _thumbnailWidth - 2 * widget.spacing;
   }
 
   Future<void> _initializeVideoController() async {
@@ -350,7 +358,7 @@ class _TrimEditorState extends State<TrimEditor> with TickerProviderStateMixin {
         videoFile: _videoFile!,
         videoDuration: _videoDuration,
         fit: widget.fit,
-        thumbnailHeight: _thumbnailViewerH,
+        thumbnailSize: Size(_thumbnailWidth, _thumbnailViewerH),
         numberOfThumbnails: _numberOfThumbnails,
         quality: widget.thumbnailQuality,
       );
@@ -473,57 +481,61 @@ class _TrimEditorState extends State<TrimEditor> with TickerProviderStateMixin {
       onHorizontalDragStart: _onDragStart,
       onHorizontalDragUpdate: _onDragUpdate,
       onHorizontalDragEnd: _onDragEnd,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          widget.showDuration
-              ? SizedBox(
-                  width: _thumbnailViewerW,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Text(
-                          Duration(milliseconds: _videoStartPos.toInt()).toString().split('.')[0],
-                          style: widget.durationTextStyle,
-                        ),
-                        videoPlayerController.value.isPlaying
-                            ? Text(
-                                Duration(milliseconds: _currentPosition.toInt()).toString().split('.')[0],
-                                style: widget.durationTextStyle,
-                              )
-                            : Container(),
-                        Text(
-                          Duration(milliseconds: _videoEndPos.toInt()).toString().split('.')[0],
-                          style: widget.durationTextStyle,
-                        ),
-                      ],
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            widget.showDuration
+                ? SizedBox(
+                    width: _thumbnailViewerW,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Text(
+                            Duration(milliseconds: _videoStartPos.toInt()).toString().split('.')[0],
+                            style: widget.durationTextStyle,
+                          ),
+                          videoPlayerController.value.isPlaying
+                              ? Text(
+                                  Duration(milliseconds: _currentPosition.toInt()).toString().split('.')[0],
+                                  style: widget.durationTextStyle,
+                                )
+                              : Container(),
+                          Text(
+                            Duration(milliseconds: _videoEndPos.toInt()).toString().split('.')[0],
+                            style: widget.durationTextStyle,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              : Container(),
-          CustomPaint(
-            foregroundPainter: TrimEditorPainter(
-              startPos: _startPos,
-              endPos: _endPos,
-              scrubberAnimationDx: _scrubberAnimation?.value ?? 0,
-              circleSize: _circleSize,
-              borderWidth: widget.borderWidth,
-              scrubberWidth: widget.scrubberWidth,
-              circlePaintColor: widget.circlePaintColor,
-              borderPaintColor: widget.borderPaintColor,
-              scrubberPaintColor: widget.scrubberPaintColor,
+                  )
+                : Container(),
+            CustomPaint(
+              foregroundPainter: TrimEditorPainter(
+                startPos: _startPos,
+                endPos: _endPos,
+                scrubberAnimationDx: _scrubberAnimation?.value ?? 0,
+                circleSize: _circleSize,
+                borderWidth: widget.borderWidth,
+                scrubberWidth: widget.scrubberWidth,
+                circlePaintColor: widget.circlePaintColor,
+                borderPaintColor: widget.borderPaintColor,
+                scrubberPaintColor: widget.scrubberPaintColor,
+              ),
+              child: Container(
+                color: Colors.grey[900],
+                height: _thumbnailViewerH,
+                width: _thumbnailViewerW,
+                child: thumbnailWidget ?? Container(),
+              ),
             ),
-            child: Container(
-              color: Colors.grey[900],
-              height: _thumbnailViewerH,
-              width: _thumbnailViewerW,
-              child: thumbnailWidget ?? Container(),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
